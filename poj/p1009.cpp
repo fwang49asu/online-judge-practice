@@ -104,11 +104,20 @@ void compute(Image &a, Image &b) {
         RLEPair pair = a.data[i];
         int start = pair.position;
         int end = start + pair.repeat - 1;
+	int startLine = start / a.width;
+	int endLine = end / a.width;
 
         // only check the neighbors of start and end
         compute(a, start, resultMap);
         compute(a, end, resultMap);
+
+	// if the record crosses line, check the beginning of the next line
+	if(endLine != startLine) {
+		compute(a, (startLine + 1) * a.width, resultMap);
+		compute(a, endLine * a.width, resultMap);
+	}
     }
+
     resultMap.insert(pair<int, int>(b.size, -1));
     map<int, int>::iterator it = resultMap.begin();
     RLEPair curPair;
