@@ -14,7 +14,7 @@ int next(int size, int* sticks, bool* used, int index, int total) {
     return size;
   }
   int i = index;
-  for(; i<size && (used[i] || (sticks[i] > total)); ++i);
+  for(; i<size && used[i]; ++i);
   return i;
 }
 
@@ -42,9 +42,6 @@ bool can_fit(int size, int* sticks, bool* used, int index, int total) {
 bool can_total_fit(int size, int* sticks, bool* used, int total) {
   for(int i=0; i<size; i = next(size, sticks, used, i+1, total)) {
     if(!can_fit(size, sticks, used, i, total)) {
-      for(int k=0; k<size; ++k) {
-        used[k] = false;
-      }
       return false;
     }
   }
@@ -64,12 +61,15 @@ int min_length(int size, int* sticks, bool* used) {
     if(end % result != 0) {
       continue;
     }
+    for(int i=0; i<size; ++i) {
+      used[i] = false;
+    }
     if(can_total_fit(size, sticks, used, result)) {
-      break;
+      return result;
     }
   }
 
-  return result;
+  return end;
 }
 
 int main(int argc, char* argv[]) {
@@ -84,7 +84,6 @@ int main(int argc, char* argv[]) {
     }
     for(int i=0; i<size; ++i) {
       cin >> sticks[i];
-      used[i] = false;
     }
     qsort(sticks, size, sizeof(int), reverse_cmp_int);
     
