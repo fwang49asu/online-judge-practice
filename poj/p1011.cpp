@@ -3,81 +3,80 @@
 
 using namespace std;
 
+int size;
+int sticks[64];
+bool used[64];
+int sum;
+int length;
+
 int reverse_cmp_int(const void *ap, const void *bp) {
   const int *a = static_cast<const int*>(ap);
   const int *b = static_cast<const int*>(bp);
   return (*b) - (*a);
 }
 
-int next(int size, int* sticks, bool* used, int index, int total) {
-  if(index >= size) {
-    return size;
-  }
+int next(int index) {
   int i = index;
   for(; i<size && used[i]; ++i);
   return i;
 }
 
-bool can_fit(int size, int* sticks, bool* used, int index, int total) {
-  int cur = sticks[index];
-  if(cur > total) {
-    return false;
-  }
-  if(cur == total) {
-    used[index] = true;
+bool can_fit(int times, int index, int total) {
+  if(times == (sum / length)) {
     return true;
   }
-  used[index] = true;
-  int next_total = total - cur;
-  int i = next(size, sticks, used, index+1, next_total);
-  for(; i<size; i = next(size, sticks, used, i+1, next_total)) {
-    if(can_fit(size, sticks, used, i, next_total)) {
-      return true;
-    }
-  }
-  used[index] = false;
-  return false;
-}
-
-bool can_total_fit(int size, int* sticks, bool* used, int total) {
-  for(int i=0; i<size; i = next(size, sticks, used, i+1, total)) {
-    if(!can_fit(size, sticks, used, i, total)) {
+  for(int start = next(index); start < size; start = next(start+1)) {
+    if(sticks[start] == total) {
+      used[start] = true;
+      // test for the next
+      if(can_fit(times+1, 0, length)) {
+        return true;
+      }
+      used[start] = false;
+      return false;
+    } else if(sticks[start] < total) {
+      used[start] = true;
+      if(can_fit(times, start + 1, total - sticks[start])) {
+        return true;
+      }
+      used[start] = false;
+      if(total == length) {
+        return false;
+      }
+      while(sticks[start] == sticks[start + 1]) {
+        ++start;
+      }
+    } else if(total == length) {
       return false;
     }
   }
-  return true;
+
+  return false;
 }
 
-int min_length(int size, int* sticks, bool* used) {
+int min_length() {
   int start = sticks[0];
-  // use sum as end
-  int end = 0;
+  sum = 0;
   for(int i=0; i<size; ++i) {
-    end += sticks[i];
+    sum += sticks[i];
   }
 
-  int result = start;
-  for(; result <= end; ++result) {
-    if(end % result != 0) {
+  for(int i=start; i<sum; ++i) {
+    if((sum % i) != 0) {
       continue;
     }
-    for(int i=0; i<size; ++i) {
-      used[i] = false;
+    for(int k=0; k<size; ++k) {
+      used[k] = false;
     }
-    if(can_total_fit(size, sticks, used, result)) {
-      return result;
+    length = i;
+    if(can_fit(1, 0, length)) {
+      return i;
     }
   }
-
-  return end;
+  return sum;
 }
 
 int main(int argc, char* argv[]) {
-
-  int size;
-  int sticks[64];
-  bool used[64];
-
   while(cin >> size) {
     if(size == 0) {
       break;
@@ -87,7 +86,7 @@ int main(int argc, char* argv[]) {
     }
     qsort(sticks, size, sizeof(int), reverse_cmp_int);
     
-    cout << min_length(size, sticks, used) << endl;
+    cout << min_length() << endl;
   }
 
   return 0;
