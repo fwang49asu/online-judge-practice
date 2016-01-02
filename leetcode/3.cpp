@@ -9,6 +9,9 @@ class Solution {
     int lengthOfLongestSubstring(string s) {
         int result = 1;
         int start = 0;
+        if(s.length() == 0) {
+            return 0;
+        }
         map<char, int> index_map;
         index_map[s[0]] = 0;
         for(int end = 1; end < s.length(); ++end) {
