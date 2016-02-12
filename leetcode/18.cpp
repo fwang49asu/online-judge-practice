@@ -30,7 +30,8 @@ class Solution {
                     int subtarget = target - nums[i] - nums[k];
                     int low = i+1;
                     int high = k-1;
-                    while(low < high) {
+                    int half = subtarget / 2;
+                    while(low < high && nums[low] <= half && nums[high] >= half) {
                         int sum = nums[low] + nums[high];
                         if(sum == subtarget) {
                             int array[] = {nums[i], nums[low], nums[high], nums[k]};
