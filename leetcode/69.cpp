@@ -29,7 +29,6 @@ class Solution {
             if(low > high) {
                 return high;
             }
-            cout <<low << "\t" << high << endl;
             int center = (low + high) >> 1;
             int mul = center * center;
             int higherMul = (center + 1) * (center+1);
