@@ -18,7 +18,6 @@ class Solution {
             if(index == -1) {
                 return false;
             }
-            cout << index << endl;
             return searchVector(matrix[index], target, 0, m-1);
         }
     private:
