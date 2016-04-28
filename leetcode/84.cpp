@@ -21,7 +21,7 @@ class Solution {
                     if(index_stack.empty()) {
                         tempSum = temp * i;
                     } else {
-                        tempSum = temp * (i - index_stack.top());
+                        tempSum = temp * (i - index_stack.top() - 1);
                     }
                     result = max(result, tempSum);
                     --i;
