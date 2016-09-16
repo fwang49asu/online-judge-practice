@@ -21,7 +21,6 @@ public:
         while(!working_vec.empty()) {
             ++result;
             for(string& s: working_vec) {
-                used_set.insert(s);
                 for(int i=0; i<len; ++i) {
                     string t = s;
                     for(char c='a'; c<='z'; ++c) {
@@ -34,6 +33,7 @@ public:
                         }
                         if(used_set.find(t) == used_set.end() && wordList.find(t) != wordList.end()) {
                             next_vec.push_back(t);
+                            used_set.insert(t);
                             t = s;
                         }
                     }
