@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool isUgly(int num) {
-        if(num == 0) {
+        if(num 《= 0) {
             return false;
         }
         if(num == 1) {
