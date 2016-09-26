@@ -1,28 +1,30 @@
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        stack<pair<TreeNode*, int>> state_stack;
+        stack<TreeNode*> state_stack;
         vector<int> result;
-        state_stack.push(make_pair(root, 0));
+        if(root == NULL) {
+            return result;
+        }
+        state_stack.push(root);
+        TreeNode* prev = NULL;
         while(!state_stack.empty()) {
-            auto entry = state_stack.top();
-            state_stack.pop();
-            if(entry.first == NULL || entry.second == 3) {
-                continue;
+            TreeNode* cur = state_stack.top();
+            if(prev == NULL || prev->left == cur || prev->right == cur) {
+                if(cur->left != NULL) {
+                    state_stack.push(cur->left);
+                } else if(cur->right != NULL) {
+                    state_stack.push(cur->right);
+                }
+            } else if(cur->left == prev) {
+                if(cur->right != NULL) {
+                    state_stack.push(cur->right);
+                }
+            } else {
+                result.push_back(cur->val);
+                state_stack.pop();
             }
-            ++entry.second;
-            state_stack.push(entry);
-            switch(entry.second) {
-            case 1:
-                state_stack.push(make_pair(entry.first->left, 0));
-                break;
-            case 2:
-                state_stack.push(make_pair(entry.first->right, 0));
-                break;
-            case 3:
-                result.push_back(entry.first->val);
-                break;
-            }
+            prev = cur;
         }
         return result;
     }
