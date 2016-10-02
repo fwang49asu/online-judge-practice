@@ -40,6 +40,7 @@ public:
                     AddOne(slope_map, (int)slope_f);
                 }
             }
+            result = max(dup, result);
             for(auto e : slope_map) {
                 int cur = e.second + dup;
                 result = max(cur, result);
