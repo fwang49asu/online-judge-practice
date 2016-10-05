@@ -7,6 +7,9 @@ using namespace std;
 class Solution {
 public:
     string fractionToDecimal(int numerator, int denominator) {
+        if(numerator == 0) {
+            return "0";
+        }
         if(numerator >= 0 && denominator >= 0) {
             return helper(numerator, denominator);
         }
