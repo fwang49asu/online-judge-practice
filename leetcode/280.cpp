@@ -1,10 +1,10 @@
 class Solution {
 public:
     void wiggleSort(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        for(int i=1; i<n-1; i+=2) {
-            swap(nums[i], nums[i+1]);
+        for(int i=1; i<nums.size(); ++i) {
+            if(((i&1) == 0 && nums[i-1] < nums[i]) || ((i&1) == 1 && nums[i-1] > nums[i])) {
+                swap(nums[i-1], nums[i]);
+            }
         }
     }
 };
