@@ -38,7 +38,7 @@ private:
                 || SearchMatrix(matrix, target, center_x, right, low, center_y - 1);
         }
         return SearchMatrix(matrix, target, center_x+1, right, low, high)
-            || SearchMatrix(matrix, target, left, right, center_y+1, high);
+            || SearchMatrix(matrix, target, left, center_x, center_y+1, high);
     }
     bool SearchColumn(vector<vector<int>>& matrix, int target, int column, int low, int high) {
         while(low <= high) {
