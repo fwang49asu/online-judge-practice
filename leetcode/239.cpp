@@ -9,22 +9,20 @@ public:
         if(k > n) {
             k = n;
         }
-        // first version: priority queue
-        multiset<int> s;
-        for(int i=0; i<k; ++i) {
-            s.insert(nums[i]);
-        }
-        for(int i=1; (i+k-1) < n; ++i) {
-            multiset<int>::iterator it = s.end();
-            --it;
-            result.push_back(*it);
-            s.erase(s.find(nums[i-1]));
-            s.insert(nums[i+k-1]);
-        }
-        {
-            multiset<int>::iterator it = s.end();
-            --it;
-            result.push_back(*it);
+        // second version: decreasing dequeue
+        deque<int> q;
+        for(int i=0; i<n; ++i) {
+            // add it into the queue
+            while(!q.empty() && nums[q.back()] < nums[i]) {
+                q.pop_back();
+            }
+            q.push_back(i);
+            if(i >= (k-1)) {
+                if(q.front() == (i-k)) {
+                    q.pop_front();
+                }
+                result.push_back(nums[q.front()]);
+            }
         }
         return result;
     }
