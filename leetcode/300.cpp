@@ -1,18 +1,23 @@
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
+        if(nums.empty()) {
+            return 0;
+        }
         int n = nums.size();
         int result = 0;
-        vector<int> dp(n, 0);
+        multimap<int, int> m;
         for(int i=0; i<n; ++i) {
-            for(int k=0; k<i; ++k) {
-                if(nums[i] > nums[k]) {
-                    dp[i] = max(dp[i], dp[k]);
+            int cur = 0;
+            for(auto it = m.rbegin(); it != m.rend(); ++it) {
+                if(it->second < nums[i]) {
+                    cur = it->first;
+                    break;
                 }
             }
-            ++dp[i];
-            result = max(result, dp[i]);
+            ++cur;
+            m.insert(make_pair(cur, nums[i]));
         }
-        return result;
+        return m.rbegin()->first;
     }
 };
