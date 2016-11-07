@@ -3,11 +3,9 @@ public class Solution {
         if(words == null || words.length == 0) {
             return 0;
         }
-        boolean hash[][] = new boolean[words.length][26];
+        int hash[] = new int[words.length];
         for(int i=0; i<words.length; ++i) {
-            for(int k=0; k<words[i].length(); ++k) {
-                hash[i][words[i].charAt(k) - 'a'] = true;
-            }
+            hash[i] = encode(words[i]);
         }
         int result = 0;
         for(int i=0; i<hash.length; ++i) {
@@ -20,12 +18,15 @@ public class Solution {
         return result;
     }
 
-    boolean accept(boolean[] a, boolean[] b) {
-        int n = a.length;
-        boolean result = true;
-        for(int i=0; i<n && result; ++i) {
-            result &= !(a[i] && b[i]);
+    int encode(String word) {
+        int hash = 0;
+        for(int i=0; i<word.length(); ++i) {
+            hash |= 1 << (word.charAt(i) - 'a');
         }
-        return result;
+        return hash;
+    }
+
+    boolean accept(int a, int b) {
+        return (a & b) == 0;
     }
 }
