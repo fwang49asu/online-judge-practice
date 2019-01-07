@@ -1,31 +1,33 @@
 class Solution {
 public:
-    RandomListNode *copyRandomList(RandomListNode *head) {
-        unordered_map<RandomListNode*, RandomListNode*> visit_map;
-        if(head == NULL) {
-            return NULL;
-        }
-        RandomListNode* cur_old = head;
-        RandomListNode* new_head = new RandomListNode(head->label);
-        RandomListNode* cur_new = new_head;
-
-        while(cur_old != NULL) {
-            cur_new->next = GetNode(cur_old->next, visit_map);
-            cur_new->random = GetNode(cur_old->random, visit_map);
-            cur_old = cur_old->next;
-            cur_new = cur_new->next;
-        }
-        return new_head;
+  RandomListNode *copyRandomList(RandomListNode *head) {
+    if (head == NULL) {
+      return NULL;
     }
-    RandomListNode* GetNode(RandomListNode* old, unordered_map<RandomListNode*, RandomListNode*>& visit_map) {
-        if(old == NULL) {
-            return NULL;
-        }
-        if(visit_map.find(old) != visit_map.end()) {
-            return visit_map[old];
-        }
-        RandomListNode* new_node = new RandomListNode(old->label);
-        visit_map[old] = new_node;
-        return new_node;
+    RandomListNode* cur = head;
+    while(cur != NULL) {
+      RandomListNode* node = new RandomListNode(cur->label);
+      node->next = cur->next;
+      cur->next = node;
+      cur = cur->next->next;
     }
+    cur = head;
+    while (cur != NULL) {
+      cur->next->random = cur->random == NULL ? NULL : cur->random->next;
+      cur = cur->next->next;
+    }
+    RandomListNode* result = new RandomListNode(0);
+    RandomListNode* tail = result;
+    cur = head;
+    while(cur != NULL) {
+      tail->next = cur->next;
+      cur->next = cur->next->next;
+      tail = tail->next;
+      cur = cur->next;
+    }
+    cur = result->next;
+    result->next = NULL;
+    delete result;
+    return cur;
+  }
 };
